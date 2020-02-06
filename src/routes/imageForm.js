@@ -31,22 +31,24 @@ const upload = multer({
 });
 
 router.post("/", upload.single('selectedImage'), (req, res) => {
-    console.log(req.body);
-    const { location, date, description, tags } = req.body;
+    const { location, date, description, tags, username } = req.body;
     const { filename } = req.file;
-    console.log(req.file);
+
     const newImage = new ImagePost({
         location,
         date,
         description,
-        tags,
-        imageName: filename
+        tags: tags.split(','),
+        username,
+        imageName: filename,
+        comments: [],
+        rating: []
     });
     
     newImage.save()
         .then(result => {
-            return res.status(200).json({
-                user: "Bravo tata, mare pizdar",
+            return res.json({
+                success: true,
                 document: result
             });
         })

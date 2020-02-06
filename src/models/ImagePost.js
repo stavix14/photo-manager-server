@@ -5,7 +5,10 @@ const schema = new mongoose.Schema({
     date: { type: String, required: true },
     description: { type: String, required: true},
     tags: {type: Array, required: true},
-    imageName: {type: String, required: true}
+    username: {type: String, required: true},
+    imageName: {type: String, required: true},
+    comments: {type: Array},
+    rating: {type: Array}
 }, { timestamps: true });
 
 export default mongoose.model("ImagePost", schema);
