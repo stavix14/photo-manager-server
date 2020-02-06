@@ -6,19 +6,18 @@ const router = express.Router();
 router.post('/', async (req, res) => {
     const { id, username, comment, rating } = req.body.postComment;
 
-    const doc = await ImagePost.findById(id);
+    const post = await ImagePost.findById(id);
 
-    doc.comments = nonMutatingPush(doc.comments, [[username, comment]]);
-    doc.rating = nonMutatingPush(doc.rating, [rating]);
+    post.comments = nonMutatingPush(post.comments, [[username, comment]]);
+    post.rating = nonMutatingPush(post.rating, [rating]);
 
-    doc.save()
-        .then(() => {
-            return res.json({ success: true });
-        })
-        .catch(err => {
-            console.error(err);
-            return res.status(400).json({ errors: { global: "The comment couldn't be saved in the database!" } });
-        });
+    const doc = await post.save();
+    if (doc) {
+        return res.json({ success: true });
+    }
+    else {
+        return res.status(400).json({ errors: { global: "The comment couldn't be saved in the database!" } });
+    }
 });
 
 export default router;

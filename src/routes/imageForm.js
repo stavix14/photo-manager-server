@@ -17,7 +17,6 @@ const fileFilter = (req, file, cb) => {
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
         cb(null, true);
     } else {
-        // rejects storing a file
         cb(null, false);
     }
 }
@@ -30,10 +29,10 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-router.post("/", upload.single('selectedImage'), (req, res) => {
+router.post("/", upload.single('selectedImage'), async (req, res) => {
     const { location, date, description, tags, username } = req.body;
     const { filename } = req.file;
-
+    
     const newImage = new ImagePost({
         location,
         date,
@@ -44,18 +43,14 @@ router.post("/", upload.single('selectedImage'), (req, res) => {
         comments: [],
         rating: []
     });
-    
-    newImage.save()
-        .then(result => {
-            return res.json({
-                success: true,
-                document: result
-            });
-        })
-        .catch(err => {
-            console.error(err);
-            return res.status(400).json({ errors: { global: "The form data couldn't be saved in the database!" } });
-        });
+
+    const doc = await newImage.save();
+    if (doc) {
+        return res.json({ success: true });
+    }
+    else {
+        return res.status(400).json({ errors: { global: "Registration has failed! Please try again later!" }})
+    }
 });
 
 export default router;
