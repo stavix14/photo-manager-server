@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     const imagePosts = await ImagePost.find();
+    
     if (imagePosts) {
         return res.json({ imagePosts });
     }

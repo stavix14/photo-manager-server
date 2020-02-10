@@ -12,6 +12,7 @@ router.post("/auth", async (req, res) => {
     }
 
     const user = await User.findOne({ email: credentials.email });
+
     if (user && user.isValidPassword(credentials.password)) {
         return res.json({ user: user.toAuthJSON(), success: true });
     }
@@ -31,6 +32,7 @@ router.post("/register", async (req, res) => {
     user.setPassword(credentials.password);
 
     const doc = await user.save();
+
     if (doc) {
         return res.json({ registrationSucceded: true });
     }

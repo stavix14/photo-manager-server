@@ -45,11 +45,12 @@ router.post("/", upload.single('selectedImage'), async (req, res) => {
     });
 
     const doc = await newImage.save();
+    
     if (doc) {
         return res.json({ success: true });
     }
     else {
-        return res.status(400).json({ errors: { global: "Registration has failed! Please try again later!" }})
+        return res.status(400).json({ errors: { global: "There was an error when submitting the form. Please try again!" }});
     }
 });
 
