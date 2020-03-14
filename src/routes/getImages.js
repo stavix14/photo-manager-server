@@ -1,16 +1,22 @@
 import express from 'express';
-import ImagePost from "../models/ImagePost";
+import Image from "../models/Image";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-    const imagePosts = await ImagePost.find();
-    
-    if (imagePosts) {
-        return res.json({ imagePosts });
-    }
-    else {
-        return res.status(400).json({ errors: { global: "Couldn't retrieve posts! Please try again later!" } })
+    const images = await Image.find();
+    console.log(images);
+    // put the negative outcome (no images in db) in first if so you can remove the else
+    if (images) {
+        return res.json({
+            images
+        });
+    } else {
+        return res.status(400).json({
+            errors: {
+                global: "Couldn't retrieve posts! Please try again later!"
+            }
+        })
     }
 });
 

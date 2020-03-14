@@ -4,6 +4,22 @@ import Image from "../models/Image";
 
 const router = express.Router();
 
+router.get("/", async (req, res) => {
+    const images = await Image.find();
+    console.log(images);
+    if (images) {
+        return res.json({
+            images
+        });
+    } else {
+        return res.status(400).json({
+            errors: {
+                global: "Couldn't retrieve posts! Please try again later!"
+            }
+        })
+    }
+});
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './public/');
